@@ -219,7 +219,7 @@ class _ImageFilterPageState extends State<ImageFilterPage> {
         setState(() {});
       });
     } else if (AppConstant.filterCategory[position] == 'NEON Glitch') {
-      imageFiltersBloc.neonGlitchFilter(onComplete: (refresh, p2, p3) {
+      imageFiltersBloc.neonGlitch1Filter(onComplete: (refresh, p2, p3) {
         isLoading = false;
         setState(() {});
       });

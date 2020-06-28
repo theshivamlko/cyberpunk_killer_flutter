@@ -58,12 +58,13 @@ class ImageFiltersBloc {
       }
     }
   }
+
   void pinkFilter({ClickCallback onComplete}) async {
     assert(onComplete != null);
     resultImageUnit8List = List();
     int xLength = photo.width;
     int yLength = photo.height;
-    int INTENSITY_FACTOR = 120;
+    int INTENSITY_FACTOR = 50;
     print('FILTER sketchFilter $xLength $yLength');
     img.Image newPhoto = img.Image(xLength, yLength);
 
@@ -73,42 +74,27 @@ class ImageFiltersBloc {
         Pixel pixel = Pixel.fromColor(material.Color(pixel32));
         //  print('OLD Pixel ${pixel.red} ${pixel.green} ${pixel.blue} ');
 
-        int intensity = (pixel.red + pixel.blue + pixel.green) ~/ 3;
+        // int intensity = (pixel.red + pixel.blue + pixel.green) ~/ 3;
         Pixel newPixel;
         newPixel = Pixel.fromColor(ColorConstant.neonPinkColor);
 
-        /*  print(
-            'Pixel $dx $dy ${pixel.red} ${pixel.green} ${pixel.blue} ${pixel.alpha}');*/
-
-        // photo.setPixelRgba(dx, dy, pixel.red, pixel.green, pixel.blue);
-        //    print('NEW Pixel ${pixel.red} ${pixel.green} ${pixel.blue} ');
-        newPhoto.setPixelRgba(dx, dy, newPixel.red, newPixel.green,
-            newPixel.blue, newPixel.alpha);
+        newPhoto.setPixelRgba(
+            dx, dy, newPixel.red, pixel.green, pixel.blue, pixel.alpha);
       }
     }
 
-    io.File file = io.File('/storage/emulated/0/ABC.jpg');
     print('Previous Image $mainImageUnit8List');
     print('Previous Image Length ${mainImageUnit8List.length}');
     print('Previous Image $mainImageUnit8List');
     //  mainImageUnit8List = newPhoto.getBytes(format: img.Format.rgba);
     mainImageUnit8List = img.encodeJpg(newPhoto);
     resultImageUnit8List.add(mainImageUnit8List);
-    /*  String audioString =  convert.base64.encode(photo.getBytes(format: img.Format.argb));*/
 
-    /*  if (!file.existsSync()) file.createSync(recursive: true);
-
-    file.writeAsBytesSync(mainImageUnit8List);*/
-
-    /*   print('New Image ${newPhoto.getBytes(format: img.Format.rgba)}');
-    print('New Image ${newPhoto.getBytes(format: img.Format.rgba).length}');
-    print('New Image ${newPhoto.getBytes(format: img.Format.argb)}');
-    print('New Image ${newPhoto.getBytes(format: img.Format.argb).length}');*/
-    print('New Image $mainImageUnit8List');
     print('New Image Length ${mainImageUnit8List.length}');
 
     onComplete(true, null, null);
   }
+
   void yellowFilter({ClickCallback onComplete}) async {
     assert(onComplete != null);
     resultImageUnit8List = List();
@@ -124,7 +110,7 @@ class ImageFiltersBloc {
         Pixel pixel = Pixel.fromColor(material.Color(pixel32));
         //  print('OLD Pixel ${pixel.red} ${pixel.green} ${pixel.blue} ');
 
-        int intensity = (pixel.red + pixel.blue + pixel.green) ~/ 3;
+        //int intensity = (pixel.red + pixel.blue + pixel.green) ~/ 3;
         Pixel newPixel;
         newPixel = Pixel.fromColor(material.Colors.yellow);
 
@@ -133,8 +119,8 @@ class ImageFiltersBloc {
 
         // photo.setPixelRgba(dx, dy, pixel.red, pixel.green, pixel.blue);
         //    print('NEW Pixel ${pixel.red} ${pixel.green} ${pixel.blue} ');
-        newPhoto.setPixelRgba(dx, dy, newPixel.red, newPixel.green,
-            newPixel.blue, newPixel.alpha);
+        newPhoto.setPixelRgba(
+            dx, dy, newPixel.red, pixel.green, pixel.blue, newPixel.alpha);
       }
     }
 
@@ -147,19 +133,12 @@ class ImageFiltersBloc {
     resultImageUnit8List.add(mainImageUnit8List);
     /*  String audioString =  convert.base64.encode(photo.getBytes(format: img.Format.argb));*/
 
-    /*  if (!file.existsSync()) file.createSync(recursive: true);
-
-    file.writeAsBytesSync(mainImageUnit8List);*/
-
-    /*   print('New Image ${newPhoto.getBytes(format: img.Format.rgba)}');
-    print('New Image ${newPhoto.getBytes(format: img.Format.rgba).length}');
-    print('New Image ${newPhoto.getBytes(format: img.Format.argb)}');
-    print('New Image ${newPhoto.getBytes(format: img.Format.argb).length}');*/
     print('New Image $mainImageUnit8List');
     print('New Image Length ${mainImageUnit8List.length}');
 
     onComplete(true, null, null);
   }
+
   void greenFilter({ClickCallback onComplete}) async {
     assert(onComplete != null);
     resultImageUnit8List = List();
@@ -175,9 +154,9 @@ class ImageFiltersBloc {
         Pixel pixel = Pixel.fromColor(material.Color(pixel32));
         //  print('OLD Pixel ${pixel.red} ${pixel.green} ${pixel.blue} ');
 
-        int intensity = (pixel.red + pixel.blue + pixel.green) ~/ 3;
+        //   int intensity = (pixel.red + pixel.blue + pixel.green) ~/ 3;
         Pixel newPixel;
-        newPixel = Pixel.fromColor(ColorConstant.neonPinkColor);
+        //   newPixel = Pixel.fromColor(ColorConstant.neonPinkColor);
         newPixel = Pixel.fromColor(material.Colors.green);
 
         /*  print(
@@ -185,8 +164,8 @@ class ImageFiltersBloc {
 
         // photo.setPixelRgba(dx, dy, pixel.red, pixel.green, pixel.blue);
         //    print('NEW Pixel ${pixel.red} ${pixel.green} ${pixel.blue} ');
-        newPhoto.setPixelRgba(dx, dy, newPixel.red, newPixel.green,
-            newPixel.blue, newPixel.alpha);
+        newPhoto.setPixelRgba(
+            dx, dy, pixel.red, newPixel.green, pixel.blue, newPixel.alpha);
       }
     }
 
@@ -514,15 +493,14 @@ class ImageFiltersBloc {
     onComplete(true, null, null);
   }
 
-  void neonGlitchFilter({ClickCallback onComplete}) async {
+  void neonGlitch1Filter({ClickCallback onComplete}) async {
     assert(onComplete != null);
     resultImageUnit8List = List();
     int xLength = photo.width;
     int yLength = photo.height;
     int INTENSITY_FACTOR = 120;
     print('FILTER sketchFilter $xLength $yLength');
-    img.Image newPhoto1 = img.Image(xLength, yLength);
-    img.Image newPhoto2 = img.Image(xLength, yLength);
+    img.Image newPhoto = img.Image(xLength, yLength);
 
     for (int dy = 0; dy < yLength; dy++) {
       for (int dx = 0; dx < xLength; dx++) {
@@ -531,34 +509,14 @@ class ImageFiltersBloc {
         //  print('OLD Pixel ${pixel.red} ${pixel.green} ${pixel.blue} ');
 
         int intensity = (pixel.red + pixel.blue + pixel.green) ~/ 3;
-        Pixel newPixel1;
-        Pixel newPixel2;
-        if (intensity > INTENSITY_FACTOR) {
-          // apply white color
-          newPixel1 = Pixel.fromColor(ColorConstant.neonPinkColor);
+        Pixel newPixel;
+        newPixel = Pixel.fromColor(ColorConstant.neonPinkColor);
 
-          newPixel2 = Pixel.fromColor(material.Colors.yellow);
-        } else if (intensity > 40) {
-          // apply grey color
-          // newPixel = Pixel.fromColor(material.Colors.grey);
-          newPixel1 = Pixel.fromColor(material.Colors.black);
-          newPixel2 = Pixel.fromColor(material.Colors.black);
-        } else {
-          // apply black color
-          newPixel1 = Pixel.fromColor(material.Colors.black);
-          newPixel2 = Pixel.fromColor(material.Colors.black);
-        }
+        newPhoto.setPixelRgba(
+            dx, dy, newPixel.red, pixel.green, pixel.blue, pixel.alpha);
 
-        /*  print(
-            'Pixel $dx $dy ${pixel.red} ${pixel.green} ${pixel.blue} ${pixel.alpha}');*/
 
-        // photo.setPixelRgba(dx, dy, pixel.red, pixel.green, pixel.blue);
-        //    print('NEW Pixel ${pixel.red} ${pixel.green} ${pixel.blue} ');
-        newPhoto1.setPixelRgba(
-            dx, dy, newPixel1.red, newPixel1.green, newPixel1.blue, 0x00);
-        if (dx < xLength - 1 && dy < yLength)
-          newPhoto2.setPixelRgba(
-              dx + 1, dy, newPixel2.red, newPixel2.green, newPixel2.blue, 0xFF);
+
       }
     }
 
@@ -569,7 +527,7 @@ class ImageFiltersBloc {
     //  mainImageUnit8List = newPhoto.getBytes(format: img.Format.rgba);
     //  mainImageUnit8List = img.encodeJpg(newPhoto1);
 
-    resultImageUnit8List.add(img.encodeJpg(newPhoto1));
+    resultImageUnit8List.add(img.encodeJpg(newPhoto));
     // resultImageUnit8List.add(img.encodeJpg(newPhoto2));
 
     print('New Image $mainImageUnit8List');
