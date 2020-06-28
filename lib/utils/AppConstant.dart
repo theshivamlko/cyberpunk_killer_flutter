@@ -26,6 +26,8 @@ List filterCategory = [
   'NEON Glitch2',
   'NEON Glitch3',
   'NEON Glitch4',
+  'NEON Glitch5',
+  'NEON Draw',
   'Sketch'
 ];
 

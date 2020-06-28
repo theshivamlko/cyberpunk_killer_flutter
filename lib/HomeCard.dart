@@ -3,11 +3,40 @@ import 'package:cyberpunkkillerapp/screens/ImageFilterPage.dart';
 import 'package:cyberpunkkillerapp/utils/ColorConstant.dart';
 import 'package:cyberpunkkillerapp/utils/Device.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 
-class HomeCard extends StatelessWidget {
+class HomeCard extends StatefulWidget {
+  @override
+  _HomeCardState createState() => _HomeCardState();
+}
+
+class _HomeCardState extends State<HomeCard> with TickerProviderStateMixin {
   Device device;
 
+  AnimationController animationController;
+  Animation animation;
+
   ImgPickerBloc imagePickerBloc = ImgPickerBloc();
+
+  @override
+  void initState() {
+    super.initState();
+    animationController = AnimationController(
+        lowerBound: 1.0,
+        upperBound: 2.0,
+        duration: Duration(microseconds: 990),
+        vsync: this);
+
+    animation =
+        CurvedAnimation(parent: animationController, curve: Curves.easeInOut);
+
+    SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
+      animationController.addListener(() {
+        setState(() {});
+      });
+      animationController.repeat(reverse: true);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,18 +51,14 @@ class HomeCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(device.deviceWidth * .05),
           boxShadow: [
             BoxShadow(
-              color: Colors.white,
-              blurRadius: 1.0,
-              spreadRadius: 2.0,
+              color: neonPinkColor,
+              blurRadius: 2.0 * animationController.value,
+              spreadRadius: 3.0 * animationController.value,
             ),
             BoxShadow(
-              color: neonPinkColor,
-              blurRadius: 3.0,
-              spreadRadius: 3.0,
-            ), BoxShadow(
-              color: neonPinkColor,
-              blurRadius: 8.0,
-              spreadRadius: 5.0,
+              color: Colors.white60,
+              blurRadius: 1.0 * animationController.value,
+              spreadRadius: 1.0 * animationController.value,
             ),
           ],
         ),
@@ -51,30 +76,31 @@ class HomeCard extends StatelessWidget {
                   padding: const EdgeInsets.only(top: 15.0),
                   child: Text(
                     "Image Filters",
+                    textAlign: TextAlign.center,
                     style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 30,
+                      color: Colors.white.withOpacity(0.9),
+                      fontSize: 40,
                       fontFamily: 'Cyberpunk',
                       shadows: [
                         Shadow(
-                          color: midPrimaryColor.withOpacity(1),
+                          color: midPrimaryColor,
                           //  offset: Offset(0.5, 0.0),
-                          blurRadius: 5,
+                          blurRadius: 30* animationController.value,
                         ),
                         Shadow(
-                          color: neonPinkColor.withOpacity(1),
+                          color: neonPinkColor,
                           //  offset: Offset(0.5, 0.0),
-                          blurRadius: 10,
+                          blurRadius: 15* animationController.value,
                         ),
                         Shadow(
-                          color: neonPinkColor.withOpacity(1),
+                          color: neonPinkColor,
                           // offset: Offset(0.5, 0.0),
-                          blurRadius: 15,
+                          blurRadius: 10* animationController.value,
                         ),
                         Shadow(
-                          color: neonPinkColor.withOpacity(1),
+                          color: neonPinkColor,
                           //  offset: Offset(0.5, 0.0),
-                          blurRadius: 30,
+                          blurRadius: 5* animationController.value,
                         ),
                       ],
                     ),
@@ -105,13 +131,13 @@ class HomeCard extends StatelessWidget {
                     children: <Widget>[
                       GestureDetector(
                         onTap: () {
-                        /*  Navigator.push(
+                          /*  Navigator.push(
                             context,
                             MaterialPageRoute(
                                 builder: (context) => ImageFilterPage(null)),
                           );
 */
-                             imagePickerBloc.imageFromGallery(
+                          imagePickerBloc.imageFromGallery(
                               onProceed: (path, d2, d3) {
                             Navigator.push(
                               context,
@@ -139,8 +165,14 @@ class HomeCard extends StatelessWidget {
                       ),
                       GestureDetector(
                         onTap: () {
-                          imagePickerBloc.imageFromCamera();
-                        },
+                          imagePickerBloc.imageFromCamera(
+                              onProceed: (path, d2, d3) {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => ImageFilterPage(path)),
+                                );
+                              });                        },
                         child: Row(
                           children: <Widget>[
                             Icon(
@@ -165,5 +197,12 @@ class HomeCard extends StatelessWidget {
             ],
           ),
         ));
+  }
+
+  @override
+  void dispose() {
+    animationController.dispose();
+    // TODO: implement dispose
+    super.dispose();
   }
 }

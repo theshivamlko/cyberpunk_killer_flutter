@@ -20,10 +20,21 @@ class ImgPickerBloc {
         print("imageFromGallery ${image.path}");
         onProceed(image.path, null, null);
       }
-    } else {}
+    }
   }
 
-  void imageFromCamera() {}
+  void imageFromCamera({ClickCallback onProceed}) async {
+    assert(onProceed != null);
+    if (await checkGalleryPermission()) {
+      createAppFolder();
+      PickedFile image = await _picker.getImage(source: ImageSource.camera);
+
+      if (image != null) {
+        print("imageFromGallery ${image.path}");
+        onProceed(image.path, null, null);
+      }
+    }
+  }
 
   Future<bool> checkGalleryPermission() async {
     var status = await Permission.storage.status;

@@ -1,7 +1,10 @@
+import 'dart:ui' as ui;
+
 import 'package:cyberpunkkillerapp/bloc/ImageFiltersBloc.dart';
 import 'package:cyberpunkkillerapp/utils/AppConstant.dart' as AppConstant;
 import 'package:cyberpunkkillerapp/utils/Device.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
 import 'package:flutter/scheduler.dart';
 
 class ImageFilterPage extends StatefulWidget {
@@ -17,9 +20,10 @@ class _ImageFilterPageState extends State<ImageFilterPage> {
   GlobalKey paintKey = GlobalKey();
 
 //  GlobalKey imageKey = GlobalKey();
-  bool isLoading = true;
+  bool isLoading = false;
   ImageFiltersBloc imageFiltersBloc;
   PageController pageController = PageController();
+
 
   @override
   void initState() {
@@ -30,6 +34,19 @@ class _ImageFilterPageState extends State<ImageFilterPage> {
     // widget.imagePath = '/data/user/0/Download/dante.jpeg';
 
     imageFiltersBloc = ImageFiltersBloc(widget.imagePath);
+
+/*    signatureView2 = SignatureView(
+      backgroundColor: Colors.transparent,
+      penStyle: Paint()
+        ..color = Colors.purpleAccent
+        ..strokeCap = StrokeCap.round
+        ..blendMode = BlendMode.lighten
+        ..strokeWidth = 5.0,
+      onSigned: (data) {
+        print("On change $data");
+      },
+    );*/
+
     SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
       imageFiltersBloc.getImage().then((isImage) {
         if (isImage) {
@@ -37,6 +54,40 @@ class _ImageFilterPageState extends State<ImageFilterPage> {
           setState(() {});
         }
       });
+
+   /*   signatureView1 = SignatureView(
+        backgroundColor: Colors.transparent,
+        penStyle: Paint()
+          ..color = Colors.purpleAccent
+          ..strokeCap = StrokeCap.round
+          //  ..colorFilter=ColorFilter.srgbToLinearGamma()
+          ..blendMode = BlendMode.lighten
+
+          ..isAntiAlias=true
+          ..strokeWidth = 20.0
+          ..shader =
+              ui.Gradient.linear(Offset(0.01, -0.01), Offset(0.01, -0.01), [
+            Colors.white,
+            Colors.purpleAccent,
+          ]),
+        onSigned: (data) {
+          print("On change1 $data");
+
+          *//*       signatureView2 = SignatureView(
+            backgroundColor: Colors.transparent,
+            data: data,
+            penStyle: Paint()
+              ..color = Colors.purpleAccent
+              ..strokeCap = StrokeCap.round
+              //  ..colorFilter=ColorFilter.srgbToLinearGamma()
+              ..blendMode = BlendMode.darken
+              ..strokeWidth = 2.0,
+
+          );*//*
+
+          setState(() {});
+        },
+      );*/
     });
   }
 
@@ -134,17 +185,24 @@ class _ImageFilterPageState extends State<ImageFilterPage> {
                             width: 40,
                             child: CircularProgressIndicator())
                         : Stack(
-                            children: imageFiltersBloc.resultImageUnit8List
-                                .map((data) => Image.memory(
-                                      data,
-                                      //   key: imageKey,
-                                      //color: Colors.red,
-                                      //colorBlendMode: BlendMode.hue,
-                                      //alignment: Alignment.bottomRight,
-                                      fit: BoxFit.fitHeight,
-                                      //scale: .8,
-                                    ))
-                                .toList()),
+                            children: <Widget>[
+                              Stack(
+                                  children:
+                                      imageFiltersBloc.resultImageUnit8List
+                                          .map((data) => Image.memory(
+                                                data,
+                                                //   key: imageKey,
+                                                //color: Colors.red,
+                                                //colorBlendMode: BlendMode.hue,
+                                                //alignment: Alignment.bottomRight,
+                                                fit: BoxFit.fitHeight,
+                                                //scale: .8,
+                                              ))
+                                          .toList()),
+                            /*  if (signatureView1 != null) signatureView1,
+                              if (signatureView2 != null) signatureView2*/
+                            ],
+                          ),
                   ),
                 ),
               ),
@@ -239,8 +297,18 @@ class _ImageFilterPageState extends State<ImageFilterPage> {
         isLoading = false;
         setState(() {});
       });
+    } else if (AppConstant.filterCategory[position] == 'NEON Glitch5') {
+      imageFiltersBloc.neonGlitch5Filter(onComplete: (refresh, p2, p3) {
+        isLoading = false;
+        setState(() {});
+      });
     } else if (AppConstant.filterCategory[position] == 'Sketch') {
       imageFiltersBloc.sketchFilter(onComplete: (refresh, p2, p3) {
+        isLoading = false;
+        setState(() {});
+      });
+    } else if (AppConstant.filterCategory[position] == 'NEON Draw') {
+      imageFiltersBloc.neonDraw(onComplete: (refresh, p2, p3) {
         isLoading = false;
         setState(() {});
       });

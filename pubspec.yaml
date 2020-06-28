@@ -22,6 +22,8 @@ dependencies:
   permission_handler: ^5.0.1+1
   image_picker: ^0.6.7+2
   path_provider: ^1.6.11
+#  painter: ^0.4.0
+ # flutter_signature_view: ^1.1.1
 
 dev_dependencies:
   flutter_test:
