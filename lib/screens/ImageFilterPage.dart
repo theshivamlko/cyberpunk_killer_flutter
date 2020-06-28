@@ -203,7 +203,8 @@ class _ImageFilterPageState extends State<ImageFilterPage> {
       imageFiltersBloc.yellowFilter(onComplete: (refresh, p2, p3) {
         isLoading = false;
         setState(() {});
-      });  else if (AppConstant.filterCategory[position] == 'Green')
+      });
+    else if (AppConstant.filterCategory[position] == 'Green')
       imageFiltersBloc.greenFilter(onComplete: (refresh, p2, p3) {
         isLoading = false;
         setState(() {});
@@ -218,8 +219,23 @@ class _ImageFilterPageState extends State<ImageFilterPage> {
         isLoading = false;
         setState(() {});
       });
-    } else if (AppConstant.filterCategory[position] == 'NEON Glitch') {
+    } else if (AppConstant.filterCategory[position] == 'NEON Glitch1') {
       imageFiltersBloc.neonGlitch1Filter(onComplete: (refresh, p2, p3) {
+        isLoading = false;
+        setState(() {});
+      });
+    } else if (AppConstant.filterCategory[position] == 'NEON Glitch2') {
+      imageFiltersBloc.neonGlitch2Filter(onComplete: (refresh, p2, p3) {
+        isLoading = false;
+        setState(() {});
+      });
+    } else if (AppConstant.filterCategory[position] == 'NEON Glitch3') {
+      imageFiltersBloc.neonGlitch3Filter(onComplete: (refresh, p2, p3) {
+        isLoading = false;
+        setState(() {});
+      });
+    } else if (AppConstant.filterCategory[position] == 'NEON Glitch4') {
+      imageFiltersBloc.neonGlitch4Filter(onComplete: (refresh, p2, p3) {
         isLoading = false;
         setState(() {});
       });

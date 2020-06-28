@@ -1,3 +1,6 @@
+import 'dart:io' as io;
+
+
 List mainOptions = [
   {
     "title": "Filters",
@@ -19,8 +22,14 @@ List filterCategory = [
   'Green',
   'NEON Pink',
   'NEON Purple',
-  'NEON Glitch',
+  'NEON Glitch1',
+  'NEON Glitch2',
+  'NEON Glitch3',
+  'NEON Glitch4',
   'Sketch'
 ];
 
 String saveFolderName = "CyberPunk_Killer";
+
+io.Directory appDocDir = io.Directory('/storage/emulated/0/$saveFolderName');
+

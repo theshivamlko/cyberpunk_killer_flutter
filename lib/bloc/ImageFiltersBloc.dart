@@ -20,6 +20,7 @@ class ImageFiltersBloc {
 
   Future<bool> getImage() async {
     print('getImage');
+
     typed_data.ByteData byteData = await loadImageBundleBytes();
     mainImageUnit8List = byteData.buffer.asUint8List();
     // originalImageUnit8List = Uint8List(mainImageUnit8List.length);
@@ -31,7 +32,12 @@ class ImageFiltersBloc {
   }
 
   Future<typed_data.ByteData> loadImageBundleBytes() async {
-    typed_data.ByteData imageBytes = await rootBundle.load(imagePath);
+    typed_data.ByteData imageBytes;
+    try {
+      imageBytes = await rootBundle.load(imagePath);
+    } catch (e) {
+      print('loadImageBundleBytes $e');
+    }
     return imageBytes;
   }
 
@@ -101,7 +107,7 @@ class ImageFiltersBloc {
     int xLength = photo.width;
     int yLength = photo.height;
     int INTENSITY_FACTOR = 120;
-    print('FILTER sketchFilter $xLength $yLength');
+    print('FILTER yellowFilter $xLength $yLength');
     img.Image newPhoto = img.Image(xLength, yLength);
 
     for (int dy = 0; dy < yLength; dy++) {
@@ -124,7 +130,6 @@ class ImageFiltersBloc {
       }
     }
 
-    io.File file = io.File('/storage/emulated/0/ABC.jpg');
     print('Previous Image $mainImageUnit8List');
     print('Previous Image Length ${mainImageUnit8List.length}');
     print('Previous Image $mainImageUnit8List');
@@ -145,7 +150,7 @@ class ImageFiltersBloc {
     int xLength = photo.width;
     int yLength = photo.height;
     int INTENSITY_FACTOR = 120;
-    print('FILTER sketchFilter $xLength $yLength');
+    print('FILTER greenFilter $xLength $yLength');
     img.Image newPhoto = img.Image(xLength, yLength);
 
     for (int dy = 0; dy < yLength; dy++) {
@@ -169,7 +174,6 @@ class ImageFiltersBloc {
       }
     }
 
-    io.File file = io.File('/storage/emulated/0/ABC.jpg');
     print('Previous Image $mainImageUnit8List');
     print('Previous Image Length ${mainImageUnit8List.length}');
     print('Previous Image $mainImageUnit8List');
@@ -198,7 +202,7 @@ class ImageFiltersBloc {
     int xLength = photo.width;
     int yLength = photo.height;
     int INTENSITY_FACTOR = 120;
-    print('FILTER sketchFilter $xLength $yLength');
+    print('FILTER neonPinkFilter $xLength $yLength');
     img.Image newPhoto = img.Image(xLength, yLength);
 
     for (int dy = 0; dy < yLength; dy++) {
@@ -231,7 +235,6 @@ class ImageFiltersBloc {
       }
     }
 
-    io.File file = io.File('/storage/emulated/0/ABC.jpg');
     print('Previous Image $mainImageUnit8List');
     print('Previous Image Length ${mainImageUnit8List.length}');
     print('Previous Image $mainImageUnit8List');
@@ -292,7 +295,6 @@ class ImageFiltersBloc {
       }
     }
 
-    io.File file = io.File('/storage/emulated/0/ABC.jpg');
     print('Previous Image $mainImageUnit8List');
     print('Previous Image Length ${mainImageUnit8List.length}');
     print('Previous Image $mainImageUnit8List');
@@ -312,7 +314,7 @@ class ImageFiltersBloc {
     resultImageUnit8List = List();
     int xLength = photo.width;
     int yLength = photo.height;
-    int INTENSITY_FACTOR = 70;
+    int INTENSITY_FACTOR = 120;
     print('FILTER sketchFilter $xLength $yLength');
     img.Image newPhoto = img.Image(xLength, yLength);
 
@@ -330,10 +332,10 @@ class ImageFiltersBloc {
         } else if (intensity > 100) {
           // apply grey color
           // newPixel = Pixel.fromColor(material.Colors.grey);
-          newPixel = Pixel.fromColor(material.Colors.yellow);
+          newPixel = Pixel.fromColor(material.Colors.black);
         } else {
           // apply black color
-          newPixel = Pixel.fromColor(material.Colors.yellow);
+          newPixel = Pixel.fromColor(material.Colors.black);
         }
 
         /*  print(
@@ -477,16 +479,6 @@ class ImageFiltersBloc {
     //  mainImageUnit8List = newPhoto.getBytes(format: img.Format.rgba);
     mainImageUnit8List = img.encodeJpg(newPhoto);
 
-    /*  String audioString =  convert.base64.encode(photo.getBytes(format: img.Format.argb));*/
-
-    if (!file.existsSync()) file.createSync(recursive: true);
-
-    file.writeAsBytesSync(mainImageUnit8List);
-
-    /*   print('New Image ${newPhoto.getBytes(format: img.Format.rgba)}');
-    print('New Image ${newPhoto.getBytes(format: img.Format.rgba).length}');
-    print('New Image ${newPhoto.getBytes(format: img.Format.argb)}');
-    print('New Image ${newPhoto.getBytes(format: img.Format.argb).length}');*/
     print('New Image $mainImageUnit8List');
     print('New Image Length ${mainImageUnit8List.length}');
 
@@ -498,7 +490,6 @@ class ImageFiltersBloc {
     resultImageUnit8List = List();
     int xLength = photo.width;
     int yLength = photo.height;
-    int INTENSITY_FACTOR = 120;
     print('FILTER sketchFilter $xLength $yLength');
     img.Image newPhoto = img.Image(xLength, yLength);
 
@@ -506,17 +497,30 @@ class ImageFiltersBloc {
       for (int dx = 0; dx < xLength; dx++) {
         int pixel32 = photo.getPixel(dx, dy);
         Pixel pixel = Pixel.fromColor(material.Color(pixel32));
-        //  print('OLD Pixel ${pixel.red} ${pixel.green} ${pixel.blue} ');
 
-        int intensity = (pixel.red + pixel.blue + pixel.green) ~/ 3;
-        Pixel newPixel;
-        newPixel = Pixel.fromColor(ColorConstant.neonPinkColor);
-
-        newPhoto.setPixelRgba(
-            dx, dy, newPixel.red, pixel.green, pixel.blue, pixel.alpha);
-
-
-
+        if (inRectRange(xLength, yLength, dx, dy, 0.25, 0.40, 0.0, 0.70)) {
+          //    print('FILTER APPLY  neonPinkColor');
+          Pixel newPixel1 = Pixel.fromColor(ColorConstant.neonPinkColor);
+          newPhoto.setPixelRgba(
+              dx, dy, newPixel1.red, pixel.green, pixel.blue, pixel.alpha);
+        } else if (inRectRange(
+            xLength, yLength, dx, dy, 0.80, 0.85, 0.0, 1.0)) {
+          //    print('FILTER APPLY  neonPinkColor');
+          Pixel newPixel1 = Pixel.fromColor(ColorConstant.neonPinkColor);
+          newPhoto.setPixelRgba(
+              dx, dy, newPixel1.red, pixel.green, pixel.blue, pixel.alpha);
+        } else if (inRectRange(
+            xLength, yLength, dx, dy, 0.60, 0.70, 0.20, 1.0)) {
+          //    print('FILTER APPLY  neonPinkColor');
+          Pixel newPixel1 = Pixel.fromColor(ColorConstant.neonPinkColor);
+          newPhoto.setPixelRgba(
+              dx, dy, newPixel1.red, pixel.green, pixel.blue, pixel.alpha);
+        } else {
+          //   print('FILTER APPLY  green');
+          Pixel newPixel2 = Pixel.fromColor(material.Colors.green);
+          newPhoto.setPixelRgba(
+              dx, dy, newPixel2.red, pixel.green, pixel.blue, pixel.alpha);
+        }
       }
     }
 
@@ -536,11 +540,257 @@ class ImageFiltersBloc {
     onComplete(true, null, null);
   }
 
-  int abgrToArgb(int argbColor) {
+  void neonGlitch2Filter({ClickCallback onComplete}) async {
+    assert(onComplete != null);
+    resultImageUnit8List = List();
+    int xLength = photo.width;
+    int yLength = photo.height;
+    print('FILTER sketchFilter $xLength $yLength');
+    img.Image newPhoto1 = img.Image(xLength, yLength);
+
+    for (int dy = 0; dy < yLength; dy++) {
+      for (int dx = 0; dx < xLength; dx++) {
+        int pixel32 = photo.getPixel(dx, dy);
+        Pixel pixel = Pixel.fromColor(material.Color(pixel32));
+        int intensity = (pixel.red + pixel.blue + pixel.green) ~/ 3;
+
+        if (inRectRange(xLength, yLength, dx, dy, 0.15, 0.30, 0.0, 0.70)) {
+          //    print('FILTER APPLY  neonPinkColor');
+          Pixel newPixel1 = Pixel.fromColor(ColorConstant.neonPinkColor);
+          newPhoto1.setPixelRgba(
+              dx, dy, newPixel1.red, pixel.green, pixel.blue, pixel.alpha);
+        } else if (inRectRange(
+            xLength, yLength, dx, dy, 0.60, 0.70, 0.20, 1.0)) {
+          //    print('FILTER APPLY  neonPinkColor');
+          Pixel newPixel1 = Pixel.fromColor(ColorConstant.neonPinkColor);
+          newPhoto1.setPixelRgba(
+              dx, dy, newPixel1.red, pixel.green, pixel.blue, pixel.alpha);
+        } else if (inRectRange(
+            xLength, yLength, dx, dy, 0.80, 0.85, 0.0, 1.0)) {
+          //    print('FILTER APPLY  neonPinkColor');
+          Pixel newPixel1 = Pixel.fromColor(ColorConstant.neonPinkColor);
+          newPhoto1.setPixelRgba(
+              dx, dy, newPixel1.red, pixel.green, pixel.blue, pixel.alpha);
+        } else {
+          //   print('FILTER APPLY  green');
+          //   Pixel newPixel2 = Pixel.fromColor(material.Colors.green);
+          newPhoto1.setPixelRgba(
+              dx, dy, intensity, intensity, intensity, pixel.alpha);
+        }
+      }
+    }
+
+    img.Image newPhoto2 = img.Image(newPhoto1.width, newPhoto1.height);
+    int xLength2 = newPhoto1.width;
+    int yLength2 = newPhoto1.height;
+
+    for (int dy = 0; dy < yLength2; dy++) {
+      for (int dx = 0; dx < xLength2; dx++) {
+        int pixel32 = newPhoto1.getPixel(dx, dy);
+        Pixel pixel = Pixel.fromColor(material.Color(pixel32));
+        int intensity = (pixel.red + pixel.blue + pixel.green) ~/ 3;
+
+        if (inRectRange(xLength2, yLength2, dx, dy, 0.25, 0.30, 0.0, 1.0)) {
+          //    print('FILTER APPLY  neonPinkColor');
+          Pixel newPixel1 = Pixel.fromColor(ColorConstant.neonPinkColor);
+          newPhoto2.setPixelRgba(
+              dx, dy, newPixel1.red, pixel.green, pixel.blue, pixel.alpha);
+        } else if (inRectRange(
+            xLength, yLength, dx, dy, 0.60, 0.62, 0.00, 0.50)) {
+          //    print('FILTER APPLY  neonPinkColor');
+          Pixel newPixel1 = Pixel.fromColor(ColorConstant.neonPinkColor);
+          newPhoto2.setPixelRgba(
+              dx, dy, newPixel1.red, pixel.green, pixel.blue, pixel.alpha);
+        } else if (inRectRange(
+            xLength, yLength, dx, dy, 0.87, 0.90, 0.70, 0.80)) {
+          //    print('FILTER APPLY  neonPinkColor');
+          Pixel newPixel1 = Pixel.fromColor(ColorConstant.neonPinkColor);
+          newPhoto2.setPixelRgba(
+              dx, dy, newPixel1.red, pixel.green, pixel.blue, pixel.alpha);
+        } else {
+          newPhoto2.setPixelRgba(
+              dx, dy, pixel.red, pixel.green, pixel.blue, pixel.alpha);
+        }
+      }
+    }
+
+    //io.File file = io.File('/storage/emulated/0/ABC.jpg');
+    print('Previous Image $mainImageUnit8List');
+    print('Previous Image Length ${mainImageUnit8List.length}');
+    print('Previous Image $mainImageUnit8List');
+    //  mainImageUnit8List = newPhoto.getBytes(format: img.Format.rgba);
+    //  mainImageUnit8List = img.encodeJpg(newPhoto1);
+
+    resultImageUnit8List.add(img.encodeJpg(newPhoto1));
+    resultImageUnit8List.add(img.encodeJpg(newPhoto2));
+    // resultImageUnit8List.add(img.encodeJpg(newPhoto2));
+
+    print('New Image $mainImageUnit8List');
+    print('New Image Length ${mainImageUnit8List.length}');
+
+    onComplete(true, null, null);
+  }
+
+  void neonGlitch3Filter({ClickCallback onComplete}) async {
+    assert(onComplete != null);
+    resultImageUnit8List = List();
+    int xLength = photo.width;
+    int yLength = photo.height;
+    print('FILTER sketchFilter $xLength $yLength');
+    img.Image newPhoto1 = img.Image(xLength, yLength);
+
+    int counter = 0;
+    bool reverse = false;
+
+    for (int dy = 0; dy < yLength; dy++) {
+      for (int dx = 0; dx < xLength; dx++) {
+        int pixel32 = photo.getPixel(dx, dy);
+        Pixel pixel = Pixel.fromColor(material.Color(pixel32));
+        int intensity = (pixel.red + pixel.blue + pixel.green) ~/ 3;
+
+        Pixel newPixel = Pixel.fromColor(ColorConstant.neonPinkColor);
+
+        if (!reverse) {
+          newPhoto1.setPixelRgba(
+              dx, dy, newPixel.red, pixel.green, pixel.blue, pixel.alpha);
+          counter++;
+          if (counter >= 20 || dx == 0) {
+            print('reverse1 $reverse $counter');
+            counter = 0;
+            reverse = true;
+          }
+        } else {
+          newPhoto1.setPixelRgba(
+              dx, dy, intensity, intensity, intensity, pixel.alpha);
+          counter++;
+          if (counter >= 20) {
+            print('reverse2 $reverse $counter');
+            counter = 0;
+            reverse = false;
+          }
+        }
+      }
+    }
+
+    /*   img.Image newPhoto2 = img.Image(newPhoto1.width, newPhoto1.height);
+    int xLength2 = newPhoto1.width;
+    int yLength2 = newPhoto1.height;
+
+    for (int dy = 0; dy < yLength2; dy++) {
+      for (int dx = 0; dx < xLength2; dx++) {
+        int pixel32 = newPhoto1.getPixel(dx, dy);
+        Pixel pixel = Pixel.fromColor(material.Color(pixel32));
+        //  int intensity = (pixel.red + pixel.blue + pixel.green) ~/ 3;
+
+        Pixel newPixel = Pixel.fromColor(ColorConstant.primaryColor);
+
+        if (dx / 2 != 0.0)
+          newPhoto2.setPixelRgba(
+              dx, dy, newPixel.red, pixel.green, pixel.blue, pixel.alpha);
+        else
+          newPhoto2.setPixelRgba(
+              dx, dy, pixel.red, pixel.green, pixel.blue, pixel.alpha);
+      }
+    }*/
+
+    //io.File file = io.File('/storage/emulated/0/ABC.jpg');
+    print('Previous Image $mainImageUnit8List');
+    print('Previous Image Length ${mainImageUnit8List.length}');
+    print('Previous Image $mainImageUnit8List');
+    //  mainImageUnit8List = newPhoto.getBytes(format: img.Format.rgba);
+    //  mainImageUnit8List = img.encodeJpg(newPhoto1);
+
+    resultImageUnit8List.add(img.encodeJpg(newPhoto1));
+    //  resultImageUnit8List.add(img.encodeJpg(newPhoto2));
+
+    print('New Image $mainImageUnit8List');
+    print('New Image Length ${mainImageUnit8List.length}');
+
+    onComplete(true, null, null);
+  }
+
+  void neonGlitch4Filter({ClickCallback onComplete}) async {
+    assert(onComplete != null);
+    resultImageUnit8List = List();
+    int xLength = photo.width;
+    int yLength = photo.height;
+    print('FILTER sketchFilter $xLength $yLength');
+    img.Image newPhoto1 = img.Image(xLength, yLength);
+
+    int counter = 0;
+    bool reverse = false;
+
+    for (int dy = 0; dy < yLength; dy++) {
+      for (int dx = 0; dx < xLength; dx++) {
+        int pixel32 = photo.getPixel(dx, dy);
+        Pixel pixel = Pixel.fromColor(material.Color(pixel32));
+        int intensity = (pixel.red + pixel.blue + pixel.green) ~/ 3;
+
+        Pixel newPixel = Pixel.fromColor(ColorConstant.neonPinkColor);
+
+        if (!reverse) {
+          newPhoto1.setPixelRgba(
+              dx, dy, newPixel.red, pixel.green, pixel.blue, pixel.alpha);
+          counter++;
+          if (counter >= 20 || dx == 0) {
+            print('reverse1 $reverse $counter');
+            counter = 0;
+            reverse = true;
+          }
+        } else {
+          if (dx < xLength - 10)
+            newPhoto1.setPixelRgba(
+                dx + 9, dy, pixel.red, pixel.green, pixel.blue, pixel.alpha);
+          /* newPhoto1.setPixelRgba(
+              dx+9, dy, pixel.red, pixel.green, pixel.blue, pixel.alpha);*/
+          counter++;
+          if (counter >= 20) {
+            print('reverse2 $reverse $counter');
+            counter = 0;
+            reverse = false;
+          }
+        }
+      }
+    }
+
+    img.Image newPhoto2 = img.Image(photo.width, photo.height);
+    int xLength2 = newPhoto1.width;
+    int yLength2 = newPhoto1.height;
+    for (int dy = 0; dy < yLength2; dy++) {
+      for (int dx = 0; dx < xLength2; dx++) {
+        int pixel32 = photo.getPixel(dx, dy);
+        Pixel pixel = Pixel.fromColor(material.Color(pixel32));
+        //  int intensity = (pixel.red + pixel.blue + pixel.green) ~/ 3;
+
+        //    Pixel newPixel = Pixel.fromColor(ColorConstant.primaryColor);
+
+        if (pixel.red <= 10 && pixel.blue <= 10 && pixel.green <= 10)
+          newPhoto2.setPixelRgba(
+              dx, dy, pixel.red, pixel.green, pixel.blue, pixel.alpha);
+      }
+    }
+
+    //io.File file = io.File('/storage/emulated/0/ABC.jpg');
+    print('Previous Image $mainImageUnit8List');
+    print('Previous Image Length ${mainImageUnit8List.length}');
+    print('Previous Image $mainImageUnit8List');
+    //  mainImageUnit8List = newPhoto.getBytes(format: img.Format.rgba);
+    //  mainImageUnit8List = img.encodeJpg(newPhoto1);
+
+    resultImageUnit8List.add(img.encodeJpg(newPhoto1));
+    //  resultImageUnit8List.add(img.encodeJpg(newPhoto2));
+
+    print('New Image $mainImageUnit8List');
+    print('New Image Length ${mainImageUnit8List.length}');
+
+    onComplete(true, null, null);
+  }
+
+/*  int abgrToArgb(int argbColor) {
     int r = (argbColor >> 16) & 0xFF;
     int b = argbColor & 0xFF;
     return (argbColor & 0xFF00FF00) | (b << 16) | r;
-  }
+  }*/
 
   void reset({ClickCallback onComplete}) {
     assert(onComplete != null);
@@ -549,6 +799,17 @@ class ImageFiltersBloc {
     resultImageUnit8List = List();
     resultImageUnit8List.add(originalImageUnit8List);
     onComplete(true, null, null);
+  }
+
+  bool inRectRange(int x, int y, int dx, int dy, double top, double bottom,
+      double left, double right) {
+    double y1 = top * y;
+    double y2 = bottom * y;
+
+    double x1 = left * x;
+    double x2 = right * x;
+
+    return (dy > y1 && dy < y2) && (dx > x1 && dx < x2);
   }
 
   void clear() {
