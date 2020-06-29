@@ -50,7 +50,7 @@ samples, guidance on mobile development, and a full API reference.
 - Setup Environment for [Android](https://flutter.dev/docs/get-started/flutter-for/android-devs) and [iOS](https://flutter.dev/docs/get-started/flutter-for/ios-devs)
 
 ## Build Project
-- To run and build project run command `flutter build <device-name>`
+- To run  ```flutter run -d <device-name>``` and to build project run command ```flutter build <device-name>```
 - To get devices list, run `flutter devices`
 
 ### NOTE:
