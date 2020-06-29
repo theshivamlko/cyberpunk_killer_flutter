@@ -1,18 +1,15 @@
 import 'dart:io' as io;
 
-
 List mainOptions = [
   {
-    "title": "Filters",
+    "title": "Image Filters",
     "image":
-        "https://r1.ilikewallpaper.net/iphone-wallpapers/download/82917/cyberpunk-2077-gameart-4k-iphone-wallpaper-ilikewallpaper_com.jpg",
-    "options": ["Gallery", "Camera"]
+        "https://navoki.com/samples/cyberpunk-killer/images/filters-min.jpg",
   },
   {
-    "title": "Wallpaper",
+    "title": "Wallpapers",
     "image":
-        "https://r1.ilikewallpaper.net/iphone-wallpapers/download/82917/cyberpunk-2077-gameart-4k-iphone-wallpaper-ilikewallpaper_com.jpg",
-    "options": ["Wallpapers"]
+        "https://navoki.com/samples/cyberpunk-killer/images/wallpapers-min.jpg",
   },
 ];
 
@@ -27,11 +24,16 @@ List filterCategory = [
   'NEON Glitch3',
   'NEON Glitch4',
   'NEON Glitch5',
-  'NEON Draw',
-  'Sketch'
+  'Background1',
+  'Background2',
+  'Background3',
+  'Overlay1',
+  'Overlay2',
+  'Overlay3',
+  'Overlay4',
+  'Overlay5'
 ];
 
 String saveFolderName = "CyberPunk_Killer";
 
 io.Directory appDocDir = io.Directory('/storage/emulated/0/$saveFolderName');
-

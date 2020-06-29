@@ -18,7 +18,7 @@ class ImgPickerBloc {
 
       if (image != null) {
         print("imageFromGallery ${image.path}");
-        onProceed(image.path, null, null);
+        onProceed(image.path, await image.readAsBytes(), null);
       }
     }
   }
@@ -31,7 +31,7 @@ class ImgPickerBloc {
 
       if (image != null) {
         print("imageFromGallery ${image.path}");
-        onProceed(image.path, null, null);
+        onProceed(image.path, await image.readAsBytes(), null);
       }
     }
   }

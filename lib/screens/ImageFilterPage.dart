@@ -1,93 +1,68 @@
-import 'dart:ui' as ui;
+import 'dart:typed_data';
 
 import 'package:cyberpunkkillerapp/bloc/ImageFiltersBloc.dart';
 import 'package:cyberpunkkillerapp/utils/AppConstant.dart' as AppConstant;
+import 'package:cyberpunkkillerapp/utils/ColorConstant.dart' as ColorConstant;
 import 'package:cyberpunkkillerapp/utils/Device.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:flutter_signature_view/flutter_signature_view.dart';
+import 'package:tinycolor/tinycolor.dart';
 
 class ImageFilterPage extends StatefulWidget {
   String imagePath;
+  Uint8List imageByte;
 
-  ImageFilterPage(this.imagePath);
+  ImageFilterPage(this.imagePath, this.imageByte);
 
   @override
   _ImageFilterPageState createState() => _ImageFilterPageState();
 }
 
-class _ImageFilterPageState extends State<ImageFilterPage> {
+class _ImageFilterPageState extends State<ImageFilterPage>
+    with TickerProviderStateMixin {
   GlobalKey paintKey = GlobalKey();
 
-//  GlobalKey imageKey = GlobalKey();
+  AnimationController animationController;
+  Animation animation;
   bool isLoading = false;
+  bool needTransparent = false;
   ImageFiltersBloc imageFiltersBloc;
   PageController pageController = PageController();
+  SignatureView signatureView;
 
+  String drawPath;
+  String backgroundType;
 
   @override
   void initState() {
     super.initState();
-    /*widget.imagePath =
-        '/data/user/0/com.navoki.cyberpunkkillerapp/cache/image_picker8351625764446720074.jpg';*/
-
-    // widget.imagePath = '/data/user/0/Download/dante.jpeg';
 
     imageFiltersBloc = ImageFiltersBloc(widget.imagePath);
+    animationController = AnimationController(
+        lowerBound: 1.0,
+        upperBound: 2.0,
+        duration: Duration(seconds: 1),
+        vsync: this);
 
-/*    signatureView2 = SignatureView(
-      backgroundColor: Colors.transparent,
-      penStyle: Paint()
-        ..color = Colors.purpleAccent
-        ..strokeCap = StrokeCap.round
-        ..blendMode = BlendMode.lighten
-        ..strokeWidth = 5.0,
-      onSigned: (data) {
-        print("On change $data");
-      },
-    );*/
+    animation =
+        CurvedAnimation(parent: animationController, curve: Curves.easeInOut);
 
     SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
-      imageFiltersBloc.getImage().then((isImage) {
+      imageFiltersBloc.canvasSize = paintKey.currentContext.size;
+      imageFiltersBloc.getImage(widget.imageByte).then((isImage) {
         if (isImage) {
+          print(
+              "SchedulerBinding  getImage $isImage ${imageFiltersBloc.canvasSize}");
           isLoading = false;
           setState(() {});
         }
       });
-
-   /*   signatureView1 = SignatureView(
-        backgroundColor: Colors.transparent,
-        penStyle: Paint()
-          ..color = Colors.purpleAccent
-          ..strokeCap = StrokeCap.round
-          //  ..colorFilter=ColorFilter.srgbToLinearGamma()
-          ..blendMode = BlendMode.lighten
-
-          ..isAntiAlias=true
-          ..strokeWidth = 20.0
-          ..shader =
-              ui.Gradient.linear(Offset(0.01, -0.01), Offset(0.01, -0.01), [
-            Colors.white,
-            Colors.purpleAccent,
-          ]),
-        onSigned: (data) {
-          print("On change1 $data");
-
-          *//*       signatureView2 = SignatureView(
-            backgroundColor: Colors.transparent,
-            data: data,
-            penStyle: Paint()
-              ..color = Colors.purpleAccent
-              ..strokeCap = StrokeCap.round
-              //  ..colorFilter=ColorFilter.srgbToLinearGamma()
-              ..blendMode = BlendMode.darken
-              ..strokeWidth = 2.0,
-
-          );*//*
-
-          setState(() {});
-        },
-      );*/
+      animationController.addListener(() {
+        setState(() {});
+      });
+      animationController.repeat(reverse: true);
     });
   }
 
@@ -101,11 +76,11 @@ class _ImageFilterPageState extends State<ImageFilterPage> {
     return SafeArea(
       top: true,
       child: Scaffold(
-        backgroundColor: Colors.green,
+        backgroundColor: ColorConstant.primaryColor,
         body: Container(
           width: device.deviceWidth,
           height: device.deviceHeight,
-          /*   decoration: BoxDecoration(
+             decoration: BoxDecoration(
             color: Colors.white,
             gradient: LinearGradient(
               begin: Alignment.bottomCenter,
@@ -113,10 +88,10 @@ class _ImageFilterPageState extends State<ImageFilterPage> {
               colors: [
                 TinyColor(Theme.of(context).primaryColor).darken(20).color,
                 TinyColor(Theme.of(context).primaryColor).darken(15).color,
-                TinyColor(ColorConstant.midPrimaryColor).darken(8).color,
+                TinyColor(ColorConstant.midPrimaryColor).darken(15).color,
               ],
             ),
-          ),*/
+          ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
@@ -172,75 +147,86 @@ class _ImageFilterPageState extends State<ImageFilterPage> {
                 color: Colors.transparent,
                 child: RepaintBoundary(
                   key: paintKey,
-                  child: GestureDetector(
-                    onPanDown: (details) {
-                      //   searchPixel(details.globalPosition);
-                    },
-                    onPanUpdate: (details) {
-                      //  searchPixel(details.globalPosition);
-                    },
-                    child: isLoading
-                        ? Container(
-                            height: 40,
-                            width: 40,
-                            child: CircularProgressIndicator())
-                        : Stack(
+                  child: isLoading
+                      ? Container(
+                          height: 40,
+                          width: 40,
+                          child: CircularProgressIndicator())
+                      : Container(
+                          color: Colors.black,
+                          child: Stack(
                             children: <Widget>[
                               Stack(
-                                  children:
-                                      imageFiltersBloc.resultImageUnit8List
-                                          .map((data) => Image.memory(
-                                                data,
-                                                //   key: imageKey,
-                                                //color: Colors.red,
-                                                //colorBlendMode: BlendMode.hue,
-                                                //alignment: Alignment.bottomRight,
-                                                fit: BoxFit.fitHeight,
-                                                //scale: .8,
-                                              ))
-                                          .toList()),
-                            /*  if (signatureView1 != null) signatureView1,
-                              if (signatureView2 != null) signatureView2*/
+                                  children: imageFiltersBloc
+                                      .resultImageUnit8List
+                                      .map((data) => Image.memory(
+                                            data,
+                                            height: device.deviceHeight - 200,
+                                            //   key: imageKey,
+                                            //color: Colors.red,
+                                            //colorBlendMode: BlendMode.hue,
+                                            //alignment: Alignment.bottomRight,
+                                            fit: BoxFit.fitWidth,
+                                            //scale: .8,
+                                          ))
+                                      .toList()),
+                              /*   if (signatureView != null && needTransparent)
+                                Container(child: signatureView),*/
+                              /*   if (signatureView2 != null) signatureView2*/
                             ],
                           ),
-                  ),
+                        ),
                 ),
               ),
               Expanded(
                 child: Container(
-                  height: 60,
-                  color: Colors.red,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      Container(
-                        height: 30,
-                        child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemBuilder: (context, position) {
-                            return GestureDetector(
-                              onTap: () {
-                                isLoading = true;
-                                setState(() {});
-                                print(AppConstant.filterCategory[position]);
+                  padding: EdgeInsets.all(2),
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemBuilder: (context, position) {
+                      return GestureDetector(
+                        onTap: () {
+                          isLoading = true;
+                          setState(() {});
+                          print(AppConstant.filterCategory[position]);
 
-                                applyFilter(position);
-                              },
-                              child: Container(
-                                  color: Colors.green,
-                                  alignment: Alignment.center,
-                                  width: 100,
-                                  child: Text(
-                                    AppConstant.filterCategory[position],
-                                    style: TextStyle(color: Colors.white),
-                                  )),
-                            );
-                          },
-                          itemCount:
-                              AppConstant.filterCategory.length, // Can be null
-                        ),
-                      )
-                    ],
+                          applyFilter(position);
+                        },
+                        child: Container(
+                            alignment: Alignment.center,
+                            margin:
+                                EdgeInsets.only(right: 10, top: 2, bottom: 2),
+                            height: 60,
+                            width: 70,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(
+                                  device.deviceWidth * .03),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: ColorConstant.neonPinkColor,
+                                  blurRadius: 1.0 * animationController.value,
+                                  spreadRadius: 2.0 * animationController.value,
+                                ),
+                                BoxShadow(
+                                  color: Colors.white60,
+                                  blurRadius: 1.0 * animationController.value,
+                                  spreadRadius: 1.0 * animationController.value,
+                                ),
+                              ],
+                            ),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(
+                                  device.deviceWidth * .02),
+                              child: Image.network(
+                                "https://r1.ilikewallpaper.net/iphone-wallpapers/download/82917/cyberpunk-2077-gameart-4k-iphone-wallpaper-ilikewallpaper_com.jpg",
+                                fit: BoxFit.fitWidth,
+                                width: 70,
+                              ),
+                            )),
+                      );
+                    },
+                    itemCount: AppConstant.filterCategory.length, // Can be null
                   ),
                 ),
               )
@@ -307,8 +293,85 @@ class _ImageFilterPageState extends State<ImageFilterPage> {
         isLoading = false;
         setState(() {});
       });
-    } else if (AppConstant.filterCategory[position] == 'NEON Draw') {
-      imageFiltersBloc.neonDraw(onComplete: (refresh, p2, p3) {
+    } else if (AppConstant.filterCategory[position] == 'Background1') {
+      isLoading = false;
+      setState(() {});
+
+      print('$signatureView $needTransparent $isLoading');
+      imageFiltersBloc
+          .setBackground('assets/images/glitch_triangle_potrait.jpg',
+              onComplete: (refresh, p2, p3) {
+        isLoading = false;
+        setState(() {});
+      });
+    } else if (AppConstant.filterCategory[position] == 'Background2') {
+      isLoading = false;
+      setState(() {});
+
+      print('$signatureView $needTransparent $isLoading');
+      imageFiltersBloc.setBackground('assets/images/glitch_circle_potrait.jpg',
+          onComplete: (refresh, p2, p3) {
+        isLoading = false;
+        setState(() {});
+      });
+      isLoading = false;
+    } else if (AppConstant.filterCategory[position] == 'Background3') {
+      isLoading = false;
+      setState(() {});
+
+      print('$signatureView $needTransparent $isLoading');
+      imageFiltersBloc.setBackground('assets/images/glitch_circle2_potrait.jpg',
+          onComplete: (refresh, p2, p3) {
+        isLoading = false;
+        setState(() {});
+      });
+    } else if (AppConstant.filterCategory[position] == 'Overlay1') {
+      isLoading = false;
+      setState(() {});
+
+      print('$signatureView $needTransparent $isLoading');
+      imageFiltersBloc.setOverLay('assets/images/fluid.png',
+          onComplete: (refresh, p2, p3) {
+        isLoading = false;
+        setState(() {});
+      });
+    } else if (AppConstant.filterCategory[position] == 'Overlay2') {
+      isLoading = false;
+      setState(() {});
+
+      print('$signatureView $needTransparent $isLoading');
+      imageFiltersBloc.setOverLay('assets/images/glitch.png',
+          onComplete: (refresh, p2, p3) {
+        isLoading = false;
+        setState(() {});
+      });
+    } else if (AppConstant.filterCategory[position] == 'Overlay3') {
+      isLoading = false;
+      setState(() {});
+
+      print('$signatureView $needTransparent $isLoading');
+      imageFiltersBloc.setOverLay('assets/images/glitch_triangle_potrait.png',
+          onComplete: (refresh, p2, p3) {
+        isLoading = false;
+        setState(() {});
+      });
+    } else if (AppConstant.filterCategory[position] == 'Overlay4') {
+      isLoading = false;
+      setState(() {});
+
+      print('$signatureView $needTransparent $isLoading');
+      imageFiltersBloc.setOverLay('assets/images/glitch_circle_potrait.png',
+          onComplete: (refresh, p2, p3) {
+        isLoading = false;
+        setState(() {});
+      });
+    } else if (AppConstant.filterCategory[position] == 'Overlay5') {
+      isLoading = false;
+      setState(() {});
+
+      print('$signatureView $needTransparent $isLoading');
+      imageFiltersBloc.setOverLay('assets/images/glitch_circle2_potrait.png',
+          onComplete: (refresh, p2, p3) {
         isLoading = false;
         setState(() {});
       });
@@ -318,6 +381,7 @@ class _ImageFilterPageState extends State<ImageFilterPage> {
   @override
   void dispose() {
     imageFiltersBloc.clear();
+    animationController.dispose();
     super.dispose();
   }
 }

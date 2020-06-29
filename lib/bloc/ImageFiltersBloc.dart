@@ -13,26 +13,30 @@ class ImageFiltersBloc {
   ImageFiltersBloc(this.imagePath);
 
   String imagePath;
+  material.Size  canvasSize;
   typed_data.Uint8List mainImageUnit8List;
   List<typed_data.Uint8List> resultImageUnit8List = List();
   typed_data.Uint8List originalImageUnit8List;
   img.Image photo;
 
-  Future<bool> getImage() async {
+  Future<bool> getImage(typed_data.Uint8List imageByte) async {
     print('getImage');
-    await Future.delayed(Duration(seconds: 1));
+    //await Future.delayed(Duration(seconds: 1));
 
-    typed_data.ByteData byteData = await loadImageBundleBytes();
-    mainImageUnit8List = byteData.buffer.asUint8List();
+    // typed_data.ByteData byteData = await loadImageBundleBytes(imagePath);
+    // if (byteData != null) {
+    mainImageUnit8List = imageByte;
+
     // originalImageUnit8List = Uint8List(mainImageUnit8List.length);
     originalImageUnit8List = mainImageUnit8List;
     resultImageUnit8List.add(mainImageUnit8List);
     setImageBytes(mainImageUnit8List);
+    // }
 
     return mainImageUnit8List != null;
   }
 
-  Future<typed_data.ByteData> loadImageBundleBytes() async {
+  Future<typed_data.ByteData> loadImageBundleBytes(String imagePath) async {
     typed_data.ByteData imageBytes;
     try {
       imageBytes = await rootBundle.load(imagePath);
@@ -45,6 +49,7 @@ class ImageFiltersBloc {
   void setImageBytes(typed_data.Uint8List values) {
     photo = null;
     photo = img.decodeImage(values);
+    photo=   img.copyResize(photo, width: canvasSize.width.toInt(), height: canvasSize.height.toInt());
   }
 
   void redFilter() async {
@@ -727,8 +732,8 @@ class ImageFiltersBloc {
 
     int counter = 0;
     bool reverse = false;
-    int interval=(xLength*.08).toInt();
-    int gap=20;
+    int interval = (xLength * .08).toInt();
+    int gap = 20;
 
     for (int dy = 0; dy < yLength; dy++) {
       for (int dx = 0; dx < xLength; dx++) {
@@ -808,8 +813,8 @@ class ImageFiltersBloc {
 
     int counter = 0;
     bool reverse = false;
-    int interval=(xLength*.15).toInt();
-    int gap=(xLength*0.05).toInt();
+    int interval = (xLength * .15).toInt();
+    int gap = (xLength * 0.05).toInt();
 
     for (int dy = 0; dy < yLength; dy++) {
       for (int dx = 0; dx < xLength; dx++) {
@@ -879,32 +884,114 @@ class ImageFiltersBloc {
     onComplete(true, null, null);
   }
 
-  void neonDraw({ClickCallback onComplete}) async {
+  void setBackground(String imagePath, {ClickCallback onComplete}) async {
     assert(onComplete != null);
     resultImageUnit8List = List();
     int xLength = photo.width;
     int yLength = photo.height;
-    print('FILTER sketchFilter $xLength $yLength');
-    img.Image newPhoto1 = img.Image(xLength, yLength);
 
+    print('FILTER setBackground $xLength $yLength');
+    img.Image newPhoto1 = img.Image(xLength, yLength);
+    typed_data.ByteData byteData = await loadImageBundleBytes(imagePath);
+
+    img.Image backgroundPhoto = img.decodeImage(byteData.buffer.asUint8List());
+    backgroundPhoto =
+        img.copyResize(backgroundPhoto, width: xLength, height: yLength);
 
     for (int dy = 0; dy < yLength; dy++) {
       for (int dx = 0; dx < xLength; dx++) {
-        int pixel32 = newPhoto1.getPixel(dx, dy);
+        int pixel32 = photo.getPixel(dx, dy);
         Pixel pixel = Pixel.fromColor(material.Color(pixel32));
+        if (pixel.green <= 255 &&
+            pixel.green >= 100 &&
+            pixel.red <= 110 &&
+            pixel.blue <= 110) {
+          print('GREEN ${pixel.green}');
+          newPhoto1.setPixelRgba(dx, dy, 0, 0, 0);
+        } else
+          newPhoto1.setPixel(dx, dy, material.Color(pixel32).value);
+      }
+    }
+    for (int dy = 0; dy < yLength; dy++) {
+      for (int dx = 0; dx < xLength; dx++) {
+        Pixel pixel =
+            Pixel.fromColor(material.Color(newPhoto1.getPixel(dx, dy)));
+        Pixel newPixel =
+            Pixel.fromColor(material.Color(backgroundPhoto.getPixel(dx, dy)));
 
-        newPhoto1.setPixelRgba(
-            dx  , dy, pixel.red, pixel.green, pixel.blue, pixel.alpha);
+        if (pixel.red <= 10 && pixel.blue <= 10 && pixel.green <= 10) {
+          newPhoto1.setPixel(dx, dy, newPixel.toColor().value);
+        } else {
+          int intensity = (pixel.red + pixel.blue + pixel.green) ~/ 3;
+          //  Pixel newPixel1 = Pixel.fromColor(ColorConstant.neonPinkColor);
+          newPhoto1.setPixel(dx, dy, pixel.toColor().value);
+        }
       }
     }
 
     print('Previous Image $mainImageUnit8List');
     print('Previous Image Length ${mainImageUnit8List.length}');
     print('Previous Image $mainImageUnit8List');
+    //  mainImageUnit8List = newPhoto.getBytes(format: img.Format.rgba);
     //  mainImageUnit8List = img.encodeJpg(newPhoto1);
 
-    resultImageUnit8List.add(img.encodeJpg(newPhoto1));
+    resultImageUnit8List.add(img.encodeJpg(newPhoto1, quality: 100));
     // resultImageUnit8List.add(img.encodeJpg(newPhoto2));
+
+    print('New Image $mainImageUnit8List');
+    print('New Image Length ${mainImageUnit8List.length}');
+
+    onComplete(true, null, null);
+  }
+
+  void setOverLay(String imagePath, {ClickCallback onComplete}) async {
+    assert(onComplete != null);
+    resultImageUnit8List = List();
+    int xLength = photo.width;
+    int yLength = photo.height;
+
+    print('FILTER setBackground $xLength $yLength');
+    // img.Image newPhoto1 = img.Image(xLength, yLength);
+    typed_data.ByteData byteData = await loadImageBundleBytes(imagePath);
+
+    img.Image overlayPhoto = img.decodeImage(byteData.buffer.asUint8List());
+    overlayPhoto =
+        img.copyResize(overlayPhoto, width: xLength, height: yLength);
+
+/*    for (int dy = 0; dy < yLength; dy++) {
+      for (int dx = 0; dx < xLength; dx++) {
+        int pixel32 = photo.getPixel(dx, dy);
+        Pixel pixel = Pixel.fromColor(material.Color(pixel32));
+        if (pixel.green <= 255 &&
+            pixel.green >= 100 &&
+            pixel.red <= 110 &&
+            pixel.blue <= 110) {
+          print('GREEN ${pixel.green}');
+          newPhoto1.setPixelRgba(dx, dy, 0, 0, 0);
+        } else
+          newPhoto1.setPixel(dx, dy, material.Color(pixel32).value);
+      }
+    }*/
+
+/*    for (int dy = 0; dy < yLength; dy++) {
+      for (int dx = 0; dx < xLength; dx++) {
+   */ /*     Pixel pixel =
+            Pixel.fromColor(material.Color());*/ /*
+
+        Pixel   pixel = Pixel.fromColor(
+            material.Color(img.setAlpha(overlayPhoto.getPixel(dx, dy), 250)));
+        photo.setPixel(dx, dy, pixel.toColor().value);
+      }
+    }*/
+
+    print('Previous Image $mainImageUnit8List');
+    print('Previous Image Length ${mainImageUnit8List.length}');
+    print('Previous Image $mainImageUnit8List');
+    //  mainImageUnit8List = newPhoto.getBytes(format: img.Format.rgba);
+    //  mainImageUnit8List = img.encodeJpg(newPhoto1);
+
+    resultImageUnit8List.add(img.encodeJpg(photo, quality: 100));
+    resultImageUnit8List.add(img.encodePng(overlayPhoto));
 
     print('New Image $mainImageUnit8List');
     print('New Image Length ${mainImageUnit8List.length}');
