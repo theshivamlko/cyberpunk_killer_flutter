@@ -17,6 +17,7 @@ List filterCategory = [
   'Pink',
   'Yellow',
   'Green',
+  'Sketch',
   'NEON Pink',
   'NEON Purple',
   'NEON Glitch1',

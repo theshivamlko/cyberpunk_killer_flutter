@@ -80,7 +80,7 @@ class _ImageFilterPageState extends State<ImageFilterPage>
         body: Container(
           width: device.deviceWidth,
           height: device.deviceHeight,
-             decoration: BoxDecoration(
+          decoration: BoxDecoration(
             color: Colors.white,
             gradient: LinearGradient(
               begin: Alignment.bottomCenter,
@@ -218,10 +218,18 @@ class _ImageFilterPageState extends State<ImageFilterPage>
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(
                                   device.deviceWidth * .02),
-                              child: Image.network(
-                                "https://r1.ilikewallpaper.net/iphone-wallpapers/download/82917/cyberpunk-2077-gameart-4k-iphone-wallpaper-ilikewallpaper_com.jpg",
-                                fit: BoxFit.fitWidth,
-                                width: 70,
+                              child: Stack(
+                                children: <Widget>[
+                                  Image.network(
+                                    "https://r1.ilikewallpaper.net/iphone-wallpapers/download/82917/cyberpunk-2077-gameart-4k-iphone-wallpaper-ilikewallpaper_com.jpg",
+                                    fit: BoxFit.fitWidth,
+                                    width: 70,
+                                  ),
+                                  Text(
+                                    AppConstant.filterCategory[position],
+                                    style: TextStyle(color: Colors.white),
+                                  )
+                                ],
                               ),
                             )),
                       );
@@ -239,17 +247,20 @@ class _ImageFilterPageState extends State<ImageFilterPage>
 
   void applyFilter(int position) {
     if (AppConstant.filterCategory[position] == 'Pink')
-      imageFiltersBloc.pinkFilter(onComplete: (refresh, p2, p3) {
+      imageFiltersBloc.applyMonoFilter(ColorConstant.neonPinkColor,
+          onComplete: (refresh, p2, p3) {
         isLoading = false;
         setState(() {});
       });
     else if (AppConstant.filterCategory[position] == 'Yellow')
-      imageFiltersBloc.yellowFilter(onComplete: (refresh, p2, p3) {
+      imageFiltersBloc.applyMonoFilter(Colors.yellow,
+          onComplete: (refresh, p2, p3) {
         isLoading = false;
         setState(() {});
       });
     else if (AppConstant.filterCategory[position] == 'Green')
-      imageFiltersBloc.greenFilter(onComplete: (refresh, p2, p3) {
+      imageFiltersBloc.applyMonoFilter(Colors.green,
+          onComplete: (refresh, p2, p3) {
         isLoading = false;
         setState(() {});
       });
@@ -289,7 +300,8 @@ class _ImageFilterPageState extends State<ImageFilterPage>
         setState(() {});
       });
     } else if (AppConstant.filterCategory[position] == 'Sketch') {
-      imageFiltersBloc.sketchFilter(onComplete: (refresh, p2, p3) {
+      imageFiltersBloc.sketchFilter(Colors.black,
+          onComplete: (refresh, p2, p3) {
         isLoading = false;
         setState(() {});
       });
