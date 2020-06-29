@@ -1,9 +1,9 @@
 import 'dart:typed_data';
+import 'dart:ui' as ui;
 
 import 'package:cyberpunkkillerapp/bloc/ImageFiltersBloc.dart';
 import 'package:cyberpunkkillerapp/utils/AppConstant.dart' as AppConstant;
 import 'package:cyberpunkkillerapp/utils/ColorConstant.dart' as ColorConstant;
-import 'package:cyberpunkkillerapp/utils/Device.dart';
 import 'package:cyberpunkkillerapp/utils/Utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
@@ -11,7 +11,8 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_signature_view/flutter_signature_view.dart';
 import 'package:tinycolor/tinycolor.dart';
-import 'dart:ui' as ui;
+
+import 'file:///C:/Users/TheDoctor/FlutterProjects/cyberpunk_killer_app/lib/models/Device.dart';
 
 class ImageFilterPage extends StatefulWidget {
   String imagePath;
@@ -121,18 +122,21 @@ class _ImageFilterPageState extends State<ImageFilterPage>
                               size: 30,
                               color: Theme.of(context).primaryIconTheme.color,
                             ),
-                            onPressed: () async{
-                              RenderRepaintBoundary boundary = paintKey.currentContext.findRenderObject();
+                            onPressed: () async {
+                              RenderRepaintBoundary boundary =
+                                  paintKey.currentContext.findRenderObject();
                               ui.Image image = await boundary.toImage();
-                              ByteData byteData = await image.toByteData(format: ui.ImageByteFormat.png);
-                              Uint8List pngBytes = byteData.buffer.asUint8List();
+                              ByteData byteData = await image.toByteData(
+                                  format: ui.ImageByteFormat.png);
+                              Uint8List pngBytes =
+                                  byteData.buffer.asUint8List();
 
                               Utils.saveToFile(pngBytes).then((saved) {
-                                if(saved){
-                                  Utils.showToast('Saved at ${AppConstant.appDocDir.path}');
+                                if (saved) {
+                                  Utils.showToast(
+                                      'Saved at ${AppConstant.appDocDir.path}');
                                 }
                               });
-
                             }),
                         IconButton(
                             icon: Icon(
@@ -145,13 +149,7 @@ class _ImageFilterPageState extends State<ImageFilterPage>
                                 setState(() {});
                               });
                             }),
-                        IconButton(
-                            icon: Icon(
-                              Icons.check,
-                              size: 30,
-                              color: Theme.of(context).primaryIconTheme.color,
-                            ),
-                            onPressed: () {}),
+
                       ],
                     ),
                   ],
@@ -232,14 +230,17 @@ class _ImageFilterPageState extends State<ImageFilterPage>
                                   device.deviceWidth * .02),
                               child: Stack(
                                 children: <Widget>[
-                                  Image.network(
-                                    "https://r1.ilikewallpaper.net/iphone-wallpapers/download/82917/cyberpunk-2077-gameart-4k-iphone-wallpaper-ilikewallpaper_com.jpg",
+                                  Image.asset(
+                                    'assets/images/${AppConstant.filterCategory[position].toString().toLowerCase()}.jpg',
                                     fit: BoxFit.fitWidth,
                                     width: 70,
                                   ),
-                                  Text(
-                                    AppConstant.filterCategory[position],
-                                    style: TextStyle(color: Colors.white),
+                                  Align(
+                                    alignment: Alignment.bottomCenter,
+                                    child: Text(
+                                      AppConstant.filterCategory[position],
+                                      style: TextStyle(color: Colors.white,fontFamily: 'Avenir',fontSize: 14),
+                                    ),
                                   )
                                 ],
                               ),
@@ -276,44 +277,44 @@ class _ImageFilterPageState extends State<ImageFilterPage>
         isLoading = false;
         setState(() {});
       });
-    else if (AppConstant.filterCategory[position] == 'NEON Glitch1') {
+    else if (AppConstant.filterCategory[position] == 'NEON_Glitch1') {
       imageFiltersBloc.neonGlitch1Filter(onComplete: (refresh, p2, p3) {
         isLoading = false;
         setState(() {});
       });
-    } else if (AppConstant.filterCategory[position] == 'NEON Glitch2') {
+    } else if (AppConstant.filterCategory[position] == 'NEON_Glitch2') {
       imageFiltersBloc.neonGlitch2Filter(onComplete: (refresh, p2, p3) {
         isLoading = false;
         setState(() {});
       });
-    } else if (AppConstant.filterCategory[position] == 'NEON Glitch3') {
+    } else if (AppConstant.filterCategory[position] == 'NEON_Glitch3') {
       imageFiltersBloc.neonGlitch3Filter(onComplete: (refresh, p2, p3) {
         isLoading = false;
         setState(() {});
       });
-    } else if (AppConstant.filterCategory[position] == 'NEON Glitch4') {
+    } else if (AppConstant.filterCategory[position] == 'NEON_Glitch4') {
       imageFiltersBloc.neonGlitch4Filter(onComplete: (refresh, p2, p3) {
         isLoading = false;
         setState(() {});
       });
-    } else if (AppConstant.filterCategory[position] == 'NEON Glitch5') {
+    } else if (AppConstant.filterCategory[position] == 'NEON_Glitch5') {
       imageFiltersBloc.neonGlitch5Filter(onComplete: (refresh, p2, p3) {
         isLoading = false;
         setState(() {});
       });
-    } else if (AppConstant.filterCategory[position] == 'Sketch Black') {
+    } else if (AppConstant.filterCategory[position] == 'Sketch_Black') {
       imageFiltersBloc.sketchFilter(Colors.black,
           onComplete: (refresh, p2, p3) {
         isLoading = false;
         setState(() {});
       });
-    } else if (AppConstant.filterCategory[position] == 'Sketch Green') {
+    } else if (AppConstant.filterCategory[position] == 'Sketch_Green') {
       imageFiltersBloc.sketchFilter(Colors.green,
           onComplete: (refresh, p2, p3) {
         isLoading = false;
         setState(() {});
       });
-    } else if (AppConstant.filterCategory[position] == 'Sketch Pink') {
+    } else if (AppConstant.filterCategory[position] == 'Sketch_Pink') {
       imageFiltersBloc.sketchFilter(ColorConstant.neonPinkColor,
           onComplete: (refresh, p2, p3) {
         isLoading = false;

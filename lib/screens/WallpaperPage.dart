@@ -1,7 +1,7 @@
 import 'package:cyberpunkkillerapp/bloc/WallpaperBloc.dart';
 import 'package:cyberpunkkillerapp/utils/AppConstant.dart' as AppConstant;
 import 'package:cyberpunkkillerapp/utils/ColorConstant.dart' as ColorConstant;
-import 'package:cyberpunkkillerapp/utils/Device.dart';
+import 'file:///C:/Users/TheDoctor/FlutterProjects/cyberpunk_killer_app/lib/models/Device.dart';
 import 'package:cyberpunkkillerapp/utils/Utils.dart';
 import 'package:flutter/material.dart';
 import 'package:tinycolor/tinycolor.dart';

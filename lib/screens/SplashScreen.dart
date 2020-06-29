@@ -1,6 +1,6 @@
-import 'package:cyberpunkkillerapp/HomePage.dart';
 import 'package:cyberpunkkillerapp/utils/ColorConstant.dart' as ColorConstant;
-import 'package:cyberpunkkillerapp/utils/Device.dart';
+import 'file:///C:/Users/TheDoctor/FlutterProjects/cyberpunk_killer_app/lib/models/Device.dart';
+import 'package:cyberpunkkillerapp/screens/HomePage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 

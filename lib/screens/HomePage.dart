@@ -1,14 +1,14 @@
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:cyberpunkkillerapp/HomeCard.dart';
 import 'package:cyberpunkkillerapp/bloc/ImgPickerBloc.dart';
 import 'package:cyberpunkkillerapp/screens/ImageFilterPage.dart';
+import 'package:cyberpunkkillerapp/widgets/HomeCard.dart';
 import 'package:cyberpunkkillerapp/screens/WallpapersListPage.dart';
 import 'package:cyberpunkkillerapp/utils/AppConstant.dart' as AppConstant;
 import 'package:cyberpunkkillerapp/utils/ColorConstant.dart' as ColorConstant;
-import 'package:cyberpunkkillerapp/utils/Device.dart';
-import 'package:cyberpunkkillerapp/widgets/RippleBackground.dart';
+import 'file:///C:/Users/TheDoctor/FlutterProjects/cyberpunk_killer_app/lib/models/Device.dart';
 import 'package:flutter/material.dart';
 import 'package:tinycolor/tinycolor.dart';
+
 
 class HomePage extends StatefulWidget {
   @override
@@ -23,7 +23,6 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-
   }
 
   @override

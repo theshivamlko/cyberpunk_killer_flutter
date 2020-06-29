@@ -5,7 +5,7 @@
 Cyberpunk Killer, is a personalisation/photography app developer during Flutter Hackathon. 
 - Here you can take snapshots and apply cyberpunk filters and save it for your profile pic. 
 - Another feature is Wallpapers related to cyberpunk that you can apply on your Android device. Currently this application is for **Android only** . 
-- It is a **single code-base cross-platform app made on Flutter Framework**. Application for **iOS, Web App, PWA, Windows, macOS, Linux** will be build in upcoming days
+- It is a **single code-bas e cross-platform app made on Flutter Framework**. Application for **iOS, Web App, PWA, Windows, macOS, Linux** will be build in upcoming days
 
 [![Open Source Love](https://badges.frapsoft.com/os/v1/open-source.svg?v=102)](https://opensource.org/licenses/Apache-2.0)
 
@@ -20,7 +20,7 @@ Cyberpunk Killer, is a personalisation/photography app developer during Flutter 
 
 ## Screenshots
 
-  <img src="https://i.imgur.com/ZQaQFYr.jpg" height="300px"  /> <img src="https://i.imgur.com/GIZ4s7d.jpg" height="300px"  /> <img src="https://i.imgur.com/2O2v09F.jpg" height="300px"  /> <img src="https://i.imgur.com/qKOWFFM.jpg" height="300px"  /> <img src="https://i.imgur.com/77C166Z.png" height="300px"  /> <img src="https://i.imgur.com/fp2q1hI.png" height="300px"  /> <img src="https://i.imgur.com/jPKzKcA.png" height="300px"  /><img src="https://i.imgur.com/wJujvVh.jpg" height="300px"  /> <img src="https://i.imgur.com/NCtjtju.png" height="300px"  /> <img src="https://i.imgur.com/n92enOF.png" height="300px"  /><img src="https://i.imgur.com/xCxBZlb.png" height="300px"  /><img src="https://i.imgur.com/8fRK5q6.jpg" height="300px"  /><img src="https://i.imgur.com/dOsHNgB.png" height="300px"  /><img src="https://i.imgur.com/lsJdEGH.png" height="300px"  />
+  <img src="https://i.imgur.com/ZQaQFYr.jpg" height="300px"  /> <img src="https://i.imgur.com/GIZ4s7d.jpg" height="300px"  /> <img src="https://i.imgur.com/2O2v09F.jpg" height="300px"  /> <img src="https://i.imgur.com/qKOWFFM.jpg" height="300px"  /> <img src="https://i.imgur.com/J2d8Ph7.jpg" height="300px"  />  <img src="https://i.imgur.com/77C166Z.png" height="300px"  /> <img src="https://i.imgur.com/fp2q1hI.png" height="300px"  /> <img src="https://i.imgur.com/jPKzKcA.png" height="300px"  /><img src="https://i.imgur.com/wJujvVh.jpg" height="300px"  /> <img src="https://i.imgur.com/NCtjtju.png" height="300px"  /> <img src="https://i.imgur.com/n92enOF.png" height="300px"  /><img src="https://i.imgur.com/xCxBZlb.png" height="300px"  /><img src="https://i.imgur.com/8fRK5q6.jpg" height="300px"  /><img src="https://i.imgur.com/dOsHNgB.png" height="300px"  /><img src="https://i.imgur.com/lsJdEGH.png" height="300px"  />
 
 ## Video
 [![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/4VTMv438ukw/0.jpg)](https://www.youtube.com/watch?v=4VTMv438ukw)

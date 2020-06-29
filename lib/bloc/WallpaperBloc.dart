@@ -1,6 +1,6 @@
 import 'dart:io' as io;
 
-import 'package:cyberpunkkillerapp/API.dart' as API;
+import 'file:///C:/Users/TheDoctor/FlutterProjects/cyberpunk_killer_app/lib/utils/API.dart' as API;
 
 class WallpaperBloc {
   List wallpapersList=List();

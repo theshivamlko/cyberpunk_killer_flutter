@@ -1,6 +1,6 @@
 import 'dart:typed_data' as typed_data;
 
-import 'package:cyberpunkkillerapp/Pixel.dart';
+import 'file:///C:/Users/TheDoctor/FlutterProjects/cyberpunk_killer_app/lib/models/Pixel.dart';
 import 'package:cyberpunkkillerapp/callbacks/FilterInterface.dart';
 import 'package:cyberpunkkillerapp/utils/ColorConstant.dart' as ColorConstant;
 import 'package:flutter/material.dart' as material;

@@ -1,6 +1,6 @@
 import 'package:cyberpunkkillerapp/utils/ColorConstant.dart';
-import 'package:cyberpunkkillerapp/utils/Device.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:cyberpunkkillerapp/models/Device.dart';
+ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 
