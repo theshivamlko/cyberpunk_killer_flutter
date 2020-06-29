@@ -22,6 +22,9 @@ class _HomeCardState extends State<HomeCard> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
+    widget.map = widget.map ?? Map();
+    print(widget.map);
+
     animationController = AnimationController(
         lowerBound: 1.0,
         upperBound: 2.0,
@@ -81,7 +84,7 @@ class _HomeCardState extends State<HomeCard> with TickerProviderStateMixin {
                 child: Padding(
                   padding: const EdgeInsets.only(top: 15.0),
                   child: Text(
-                    widget.map['title'],
+                    widget.map['title']??'',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: Colors.white.withOpacity(0.9),

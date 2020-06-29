@@ -1,5 +1,4 @@
-import 'package:cyberpunkkillerapp/SplashPage.dart';
-import 'package:cyberpunkkillerapp/screens/ImageFilterPage.dart';
+import 'package:cyberpunkkillerapp/HomePage.dart';
 import 'package:cyberpunkkillerapp/utils/ColorConstant.dart';
 import 'package:flutter/material.dart';
 
@@ -15,11 +14,12 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       theme: ThemeData(
         visualDensity: VisualDensity.adaptivePlatformDensity,
+        fontFamily: 'Cyberpunk',
         primaryColor: primaryColor,
         accentColor: accentColor,
       ),
-      home: SplashPage(),
-   //   home: ImageFilterPage(null),
+      home: HomePage(),
+      //   home: ImageFilterPage(null),
     );
   }
 }

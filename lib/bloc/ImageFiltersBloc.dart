@@ -25,12 +25,12 @@ class ImageFiltersBloc {
 
     // typed_data.ByteData byteData = await loadImageBundleBytes(imagePath);
     // if (byteData != null) {
+    setImageBytes(imageByte);
     mainImageUnit8List = imageByte;
 
     // originalImageUnit8List = Uint8List(mainImageUnit8List.length);
     originalImageUnit8List = mainImageUnit8List;
     resultImageUnit8List.add(mainImageUnit8List);
-    setImageBytes(mainImageUnit8List);
     // }
 
     return mainImageUnit8List != null;

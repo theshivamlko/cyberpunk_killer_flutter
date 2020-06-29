@@ -1,8 +1,10 @@
 import 'package:cyberpunkkillerapp/HomeCard.dart';
 import 'package:cyberpunkkillerapp/bloc/WallpaperBloc.dart';
+import 'package:cyberpunkkillerapp/screens/WallpaperPage.dart';
 import 'package:cyberpunkkillerapp/utils/ColorConstant.dart' as ColorConstant;
 import 'package:cyberpunkkillerapp/utils/Device.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:tinycolor/tinycolor.dart';
 
 class WallpapersListPage extends StatefulWidget {
@@ -21,6 +23,17 @@ class _WallpapersListPageState extends State<WallpapersListPage>
   WallpaperBloc wallpaperBloc;
 
   @override
+  void initState() {
+    super.initState();
+    wallpaperBloc = WallpaperBloc();
+    SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
+      wallpaperBloc.getWallpapers().then((value) {
+        setState(() {});
+      });
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     device = Device(
         MediaQuery.of(context).size.height, MediaQuery.of(context).size.width);
@@ -34,10 +47,22 @@ class _WallpapersListPageState extends State<WallpapersListPage>
         CurvedAnimation(parent: animationController, curve: Curves.easeInOut);
 
     return Scaffold(
-      backgroundColor: ColorConstant.primaryColor,
+      extendBodyBehindAppBar: true,
+      appBar: AppBar(
+//        backgroundColor: Colors.transparent,
+        backgroundColor: Color(0x00000000),
+        elevation: 0,
+        leading: IconButton(
+            icon: Icon(
+              Icons.keyboard_arrow_left,
+              size: 40,
+              color: Theme.of(context).primaryIconTheme.color,
+            ),
+            onPressed: () {
+              Navigator.of(context).pop();
+            }),
+      ),
       body: Container(
-        width: device.deviceWidth,
-        height: device.deviceHeight,
         decoration: BoxDecoration(
           color: Colors.white,
           gradient: LinearGradient(
@@ -51,31 +76,37 @@ class _WallpapersListPageState extends State<WallpapersListPage>
           ),
         ),
         child: Column(
-          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Container(
-              height: 50,
-              margin: EdgeInsets.only(bottom: 10),
-              child: IconButton(
-                  icon: Icon(
-                    Icons.keyboard_arrow_left,
-                    size: 40,
-                    color: Theme.of(context).primaryIconTheme.color,
-                  ),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  }),
-            ),
-            Container(
               padding: EdgeInsets.all(2),
-              child: GridView.builder(
-                itemCount: 10,
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2),
-                itemBuilder: (BuildContext context, int index) {
-                 // return HomeCard();
-                },
-              ),
+              height: device.deviceHeight - 70,
+              width: device.deviceWidth,
+              child: wallpaperBloc.wallpapersList.length > 0
+                  ? GridView.builder(
+                      itemCount: wallpaperBloc.wallpapersList.length,
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          childAspectRatio: 0.6, crossAxisCount: 2),
+                      itemBuilder: (BuildContext context, int index) {
+                        Map map = Map();
+                        map['image'] =
+                            'https://navoki.com/samples/cyberpunk-killer/images/${wallpaperBloc.wallpapersList[index]['mobile']}';
+                        return GestureDetector(
+                          behavior: HitTestBehavior.opaque,
+                          onTap: (){
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => WallpaperPage( map['image'])),
+                            );
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: HomeCard(map),
+                          ),
+                        );
+                      },
+                    )
+                  : Center(child: CircularProgressIndicator()),
             )
           ],
         ),
