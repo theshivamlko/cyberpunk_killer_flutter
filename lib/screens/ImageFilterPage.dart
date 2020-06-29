@@ -4,11 +4,14 @@ import 'package:cyberpunkkillerapp/bloc/ImageFiltersBloc.dart';
 import 'package:cyberpunkkillerapp/utils/AppConstant.dart' as AppConstant;
 import 'package:cyberpunkkillerapp/utils/ColorConstant.dart' as ColorConstant;
 import 'package:cyberpunkkillerapp/utils/Device.dart';
+import 'package:cyberpunkkillerapp/utils/Utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_signature_view/flutter_signature_view.dart';
 import 'package:tinycolor/tinycolor.dart';
+import 'dart:ui' as ui;
 
 class ImageFilterPage extends StatefulWidget {
   String imagePath;
@@ -118,7 +121,19 @@ class _ImageFilterPageState extends State<ImageFilterPage>
                               size: 30,
                               color: Theme.of(context).primaryIconTheme.color,
                             ),
-                            onPressed: () {}),
+                            onPressed: () async{
+                              RenderRepaintBoundary boundary = paintKey.currentContext.findRenderObject();
+                              ui.Image image = await boundary.toImage();
+                              ByteData byteData = await image.toByteData(format: ui.ImageByteFormat.png);
+                              Uint8List pngBytes = byteData.buffer.asUint8List();
+
+                              Utils.saveToFile(pngBytes).then((saved) {
+                                if(saved){
+                                  Utils.showToast('Saved at ${AppConstant.appDocDir.path}');
+                                }
+                              });
+
+                            }),
                         IconButton(
                             icon: Icon(
                               Icons.refresh,
@@ -162,10 +177,7 @@ class _ImageFilterPageState extends State<ImageFilterPage>
                                       .map((data) => Image.memory(
                                             data,
                                             height: device.deviceHeight - 200,
-                                            //   key: imageKey,
-                                            //color: Colors.red,
-                                            //colorBlendMode: BlendMode.hue,
-                                            //alignment: Alignment.bottomRight,
+
                                             fit: BoxFit.fitWidth,
                                             //scale: .8,
                                           ))
@@ -264,17 +276,7 @@ class _ImageFilterPageState extends State<ImageFilterPage>
         isLoading = false;
         setState(() {});
       });
-    else if (AppConstant.filterCategory[position] == 'NEON Pink')
-      imageFiltersBloc.neonPinkFilter(onComplete: (refresh, p2, p3) {
-        isLoading = false;
-        setState(() {});
-      });
-    else if (AppConstant.filterCategory[position] == 'NEON Purple') {
-      imageFiltersBloc.neonPurpleFilter(onComplete: (refresh, p2, p3) {
-        isLoading = false;
-        setState(() {});
-      });
-    } else if (AppConstant.filterCategory[position] == 'NEON Glitch1') {
+    else if (AppConstant.filterCategory[position] == 'NEON Glitch1') {
       imageFiltersBloc.neonGlitch1Filter(onComplete: (refresh, p2, p3) {
         isLoading = false;
         setState(() {});
@@ -299,8 +301,20 @@ class _ImageFilterPageState extends State<ImageFilterPage>
         isLoading = false;
         setState(() {});
       });
-    } else if (AppConstant.filterCategory[position] == 'Sketch') {
+    } else if (AppConstant.filterCategory[position] == 'Sketch Black') {
       imageFiltersBloc.sketchFilter(Colors.black,
+          onComplete: (refresh, p2, p3) {
+        isLoading = false;
+        setState(() {});
+      });
+    } else if (AppConstant.filterCategory[position] == 'Sketch Green') {
+      imageFiltersBloc.sketchFilter(Colors.green,
+          onComplete: (refresh, p2, p3) {
+        isLoading = false;
+        setState(() {});
+      });
+    } else if (AppConstant.filterCategory[position] == 'Sketch Pink') {
+      imageFiltersBloc.sketchFilter(ColorConstant.neonPinkColor,
           onComplete: (refresh, p2, p3) {
         isLoading = false;
         setState(() {});

@@ -1,6 +1,10 @@
+import 'dart:io' as io;
 import 'dart:typed_data' as typed_data;
 
+import 'package:cyberpunkkillerapp/utils/AppConstant.dart' as AppConstant;
+import 'package:flutter/material.dart' as material;
 import 'package:flutter/services.dart' show rootBundle;
+import 'package:overlay_support/overlay_support.dart';
 
 class Utils {
   static bool inRectRange(int x, int y, int dx, int dy, double top,
@@ -23,5 +27,29 @@ class Utils {
       print('loadImageBundleBytes $e');
     }
     return imageBytes;
+  }
+
+  static Future<bool> saveToFile(typed_data.Uint8List bytes) async {
+    try {
+      io.File file = io.File(
+          '${AppConstant.appDocDir.path}/${DateTime.now().millisecondsSinceEpoch}.jpg');
+      if (!file.existsSync()) file.createSync(recursive: true);
+      file.writeAsBytesSync(bytes);
+      return true;
+    } catch (e) {
+      print('loadImageBundleBytes $e');
+    }
+    return false;
+  }
+
+  /// showToast at top of screen [msg]
+  static void showToast(String msg) {
+    showSimpleNotification(
+        material.Align(
+            alignment: material.Alignment.bottomCenter,
+            child: material.Text(msg,
+                style: material.TextStyle(color: material.Colors.white,fontFamily: 'Avenir'),
+                textAlign: material.TextAlign.center)),
+        background: material.Colors.grey[800]);
   }
 }

@@ -1,6 +1,8 @@
 import 'package:cyberpunkkillerapp/bloc/WallpaperBloc.dart';
+import 'package:cyberpunkkillerapp/utils/AppConstant.dart' as AppConstant;
 import 'package:cyberpunkkillerapp/utils/ColorConstant.dart' as ColorConstant;
 import 'package:cyberpunkkillerapp/utils/Device.dart';
+import 'package:cyberpunkkillerapp/utils/Utils.dart';
 import 'package:flutter/material.dart';
 import 'package:tinycolor/tinycolor.dart';
 import 'package:wallpaper_manager/wallpaper_manager.dart';
@@ -40,7 +42,9 @@ class WallpaperPage extends StatelessWidget {
                 color: Theme.of(context).primaryIconTheme.color,
               ),
               onPressed: () {
-                wallpaperBloc.downloadWallpaper(imagePath);
+                wallpaperBloc.downloadWallpaper(imagePath).then((value) {
+                  Utils.showToast('Saved at ${AppConstant.appDocDir.path}');
+                });
               }),
         ],
       ),
@@ -72,6 +76,7 @@ class WallpaperPage extends StatelessWidget {
                 wallpaperBloc.downloadWallpaper(imagePath).then((file) {
                   int location = WallpaperManager.HOME_SCREEN;
                   WallpaperManager.setWallpaperFromFile(file.path, location);
+                  Utils.showToast('DONE!');
                 });
               },
               child: Container(

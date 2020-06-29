@@ -52,4 +52,10 @@ flutter:
     - family: Cyberpunk
       fonts:
         - asset: assets/fonts/Cyberpunk-Regular.ttf
+    - family: PatinioBasica
+      fonts:
+        - asset: assets/fonts/PatinioBasica.ttf
+    - family: Avenir
+      fonts:
+        - asset: assets/fonts/Avenir.ttf
 

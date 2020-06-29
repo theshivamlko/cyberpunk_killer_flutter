@@ -7,9 +7,12 @@ import 'package:image/image.dart' as img;
 
 class SketchFilter implements FilterInterface {
   img.Image photo;
-  material.Color color;
+  material.Color color1;
+  material.Color outLineColor;
 
-  SketchFilter(this.photo, this.color);
+  SketchFilter(this.photo, this.color1,
+
+      {this.outLineColor = material.Colors.black});
 
   @override
   List<typed_data.Uint8List> applyFilter({onComplete}) {
@@ -30,9 +33,9 @@ class SketchFilter implements FilterInterface {
           // apply white color
           newPixel = Pixel.fromColor(material.Colors.white);
         } else if (intensity > 100) {
-          newPixel = Pixel.fromColor(color);
+          newPixel = Pixel.fromColor(color1);
         } else {
-          newPixel = Pixel.fromColor(material.Colors.black);
+          newPixel = Pixel.fromColor(outLineColor);
         }
 
         newPhoto.setPixel(dx, dy, newPixel.toColor().value);
